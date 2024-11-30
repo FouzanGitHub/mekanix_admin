@@ -30,8 +30,10 @@ class EngineService {
       'engine_brand[user]': '${storage.read('user_info')['_id']}',
       'engine_brand[name]': '${engineModel.name}',
       'engine_brand[subname]': '${engineModel.subname}',
-      'engine_brand[is_generator]': '${engineModel.isGenerator}',
-      'engine_brand[is_compressor]': '${engineModel.isCompressor}',
+      'engine_brand[categoryId]': '${engineModel.categoryId}',
+      'engine_brand[categoryName]': '${engineModel.categoryName}',
+      // 'engine_brand[is_generator]': '${engineModel.isGenerator}',
+      // 'engine_brand[is_compressor]': '${engineModel.isCompressor}',
     });
     request.files.add(
       http.MultipartFile.fromBytes(
@@ -269,20 +271,6 @@ class EngineService {
       };
     }
 
-    //WorkingCode
-    //   final engineData = data['data']['engine'];
-    //   success = true;
-    //   return {'data': engineData, 'success': success};
-    // } else {
-    //   debugPrint(
-    //       'Status Code: ${response.statusCode}, Response: ${response.body}');
-    //   success = false;
-    //   return {'data': null, 'success': success};
-    // }
-    // } catch (e) {
-    //   print('Error occurred: $e');
-    //   success = false;
-    //   return {'data': null, 'success': success};
-    // }
+  
   }
 }

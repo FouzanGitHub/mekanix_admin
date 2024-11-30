@@ -62,3 +62,54 @@ class CustomDropdown extends StatelessWidget {
     );
   }
 }
+class CustomDropdown2 extends StatelessWidget {
+  final String hintText;
+  final  List<DropdownMenuItem<dynamic>>? items;
+  final dynamic onChanged;
+  final dynamic value;
+
+  const CustomDropdown2({
+    super.key,
+    required this.items,
+    required this.onChanged,
+    required this.hintText,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ReUsableContainer(
+      padding: EdgeInsets.zero,
+      child: DropdownButtonFormField(
+        value: value,
+        padding: EdgeInsets.zero,
+        iconSize: 12.0,
+        alignment: Alignment.centerLeft,
+        isExpanded: false,
+        hint: CustomTextWidget(
+          text: hintText,
+          fontSize: 10,
+          fontWeight: FontWeight.w300,
+          textColor: AppColors.lightTextColor,
+        ),
+        isDense: true,
+        dropdownColor: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12.0),
+        icon: const Icon(Icons.keyboard_arrow_down_rounded),
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 10,
+          fontWeight: FontWeight.w300,
+          color: AppColors.lightTextColor,
+        ),
+        decoration: InputDecoration(
+          fillColor: Colors.grey.shade100,
+          filled: true,
+          border: const OutlineInputBorder(borderSide: BorderSide.none),
+        ),
+        items: items,
+        onChanged: onChanged,
+      ),
+    );
+  }
+}

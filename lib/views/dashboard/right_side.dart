@@ -1,5 +1,6 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:mechanix_admin/views/categories/engine.dart';
 import 'package:mechanix_admin/views/dashboard/home.dart';
 import 'package:mechanix_admin/views/dashboard/profile_section.dart';
 import 'package:mechanix_admin/views/dashboard/registrations.dart';
@@ -34,6 +35,7 @@ class RightSideWidget extends StatelessWidget {
         
           UserScreen(sideMenu: sideMenu),
           TaskScreen(sideMenu: sideMenu),
+          EnginesScreen(sideMenu: sideMenu),
           // SubscriptionsScreen(sideMenu: sideMenu),
           const SizedBox.shrink(), //Drawer
           ProfileSection(sideMenu: sideMenu),
