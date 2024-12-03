@@ -21,8 +21,9 @@ class ReUsableTextField extends StatelessWidget {
   final bool showBackgroundShadow;
   final bool showDeleteIcon;
   final VoidCallback? onDelete;
-  final Iterable<String>? autofillHints;
-
+  final bool showEditIcon;
+  final VoidCallback? onEdit;
+  final dynamic autofillHints;
   const ReUsableTextField({
     super.key,
     required this.hintText,
@@ -38,6 +39,8 @@ class ReUsableTextField extends StatelessWidget {
     this.showBackgroundShadow = true,
     this.showDeleteIcon = false,
     this.onDelete,
+    this.showEditIcon = false,
+    this.onEdit,
     this.validator,
     this.autofillHints,
   });
@@ -47,9 +50,13 @@ class ReUsableTextField extends StatelessWidget {
     return ReUsableContainer(
       showDeleteIcon: showDeleteIcon,
       onDelete: onDelete,
+      showEditIcon: showDeleteIcon,
+      onEdit: onEdit,
       showBackgroundShadow: showBackgroundShadow,
+      
       verticalPadding: context.height * 0.012,
       child: TextFormField(
+        autofillHints: autofillHints,
         readOnly: readOnly ?? false,
         onTap: onTap,
         controller: controller,
@@ -68,7 +75,6 @@ class ReUsableTextField extends StatelessWidget {
           if (keyboardType == TextInputType.number)
             FilteringTextInputFormatter.digitsOnly,
         ],
-        autofillHints: autofillHints,
         decoration: InputDecoration(
           // contentPadding: EdgeInsets.symmetric(vertical: 4.0),
           // isCollapsed: true,

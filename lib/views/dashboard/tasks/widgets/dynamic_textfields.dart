@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'heading_and_textfield.dart';
-
+import 'package:mechanix_admin/views/dashboard/tasks/widgets/heading_and_textfield.dart';
 
 class DynamicTextFields extends StatelessWidget {
   final List<TextEditingController> controllers;

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -12,7 +13,13 @@ class CustomRadioButton extends StatelessWidget {
   final String? selected;
   final bool showDeleteIcon;
   final VoidCallback? onDelete;
+  final bool showEditIcon;
+  final VoidCallback? onEdit;
+    final bool showEditTitle;
+  final VoidCallback? onEditTitle;
   final Function(String) onChange;
+   final bool showAddIcon;
+  final VoidCallback? onAddTap;
 
   const CustomRadioButton({
     super.key,
@@ -21,7 +28,13 @@ class CustomRadioButton extends StatelessWidget {
     required this.selected,
     this.showDeleteIcon = false,
     this.onDelete,
+    this.showEditIcon = false,
+    this.onEdit, 
+    this.showEditTitle = false,
+    this.onEditTitle,  
     required this.onChange,
+     this.showAddIcon = false,
+    this.onAddTap,
   });
 
   @override
@@ -31,16 +44,58 @@ class CustomRadioButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // const SizedBox(height: 6.0),
-        CustomTextWidget(
-          text: heading,
-          fontWeight: FontWeight.w500,
-          maxLines: 2,
-          fontSize: 12,
-        ),
+       Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         children: [
+           InkWell(
+                  onTap: onEditTitle,
+                  child: Row(
+                 
+                    children: [
+                    Visibility(
+                    visible: showEditTitle,
+                    child: const Icon(Icons.edit,color: Colors.grey,size: 18,)),
+                      const SizedBox(width: 1),
+                      SizedBox(
+                     
+                    width: 270,
+                        child: CustomTextWidget(
+                        text: heading,
+                        fontWeight: FontWeight.w500,
+                        maxLines: 2,
+                        fontSize:  12,
+                                      ),
+                      ),
+                    ],
+                  ),
+                ),
+        Visibility(
+                visible: showAddIcon,
+                child: InkWell(
+                  onTap: onAddTap,
+                  child: const Icon(
+                    CupertinoIcons.add_circled_solid,
+                    color: Color.fromARGB(255, 110, 110, 110),
+                  ),
+                ),
+              ),           
+         ],
+       ), 
+        // InkWell(
+        //   onTap: onEditTitle,
+        //   child: CustomTextWidget(
+        //     text: heading,
+        //     fontWeight: FontWeight.w500,
+        //     maxLines: 2,
+        //     fontSize: 12,
+        //   ),
+        // ),
         Obx(
           () => ReUsableContainer(
             showDeleteIcon: showDeleteIcon,
             onDelete: onDelete,
+            showEditIcon: showEditIcon,
+            onEdit: onEdit,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: options.map((option) {

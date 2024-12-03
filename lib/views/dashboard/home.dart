@@ -254,45 +254,7 @@ class _HomeSectionState extends State<HomeSection> {
     );
   }
 
-  // Padding _buildGraph(BuildContext context) {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(
-  //         horizontal: MediaQuery.of(context).size.width * 0.05),
-  //     child: ReUsableContainer(
-  //       color: Colors.grey.shade100,
-  //       height: MediaQuery.of(context).size.height * 0.5,
-  //       child: isLoading
-  //           ? Center(
-  //               child: SpinKitThreeBounce(
-  //                 color: AppColors.secondaryColor,
-  //                 size: 25.0,
-  //               ),
-  //             )
-  //           : SfCartesianChart(
-  //               plotAreaBorderWidth: 1,
-  //               isTransposed: false,
-  //               enableAxisAnimation: true,
-  //               enableMultiSelection: true,
-  //               enableSideBySideSeriesPlacement: false,
-  //               title: const ChartTitle(
-  //                   text: 'Yearly Analytics Data',
-  //                   textStyle: TextStyle(fontSize: 14, fontFamily: 'Poppins')),
-  //               legend: const Legend(isVisible: true),
-  //               primaryXAxis: const CategoryAxis(
-  //                 majorGridLines: MajorGridLines(width: 1),
-  //                 labelRotation: 0,
-  //               ),
-  //               primaryYAxis: const NumericAxis(
-  //                 rangePadding: ChartRangePadding.none,
-  //                 axisLine: AxisLine(width: 0),
-  //                 majorTickLines: MajorTickLines(size: 6),
-  //               ),
-  //               series: _getLineSeries(),
-  //               tooltipBehavior: TooltipBehavior(enable: true),
-  //             ),
-  //     ),
-  //   );
-  // }
+  
 
   List<CartesianSeries<_ChartData, String>> _getLineSeries() {
     return <CartesianSeries<_ChartData, String>>[
@@ -349,45 +311,6 @@ class _HomeSectionState extends State<HomeSection> {
     return maxValue + 5; // Adding some padding to the maximum value
   }
 
-  // List<CartesianSeries<_ChartData, String>> _getStackedLineSeries() {
-  //   return <CartesianSeries<_ChartData, String>>[
-  //     StackedLineSeries<_ChartData, String>(
-  //       dataSource: chartData,
-  //       xValueMapper: (_ChartData data, _) => data.month,
-  //       yValueMapper: (_ChartData data, _) => data.loginActivity,
-  //       name: 'Login Activity',
-  //       markerSettings: const MarkerSettings(isVisible: true),
-  //     ),
-  //     StackedLineSeries<_ChartData, String>(
-  //       dataSource: chartData,
-  //       xValueMapper: (_ChartData data, _) => data.month,
-  //       yValueMapper: (_ChartData data, _) => data.accountCreationActivity,
-  //       name: 'Account Creation',
-  //       markerSettings: const MarkerSettings(isVisible: true),
-  //     ),
-  //     StackedLineSeries<_ChartData, String>(
-  //       dataSource: chartData,
-  //       xValueMapper: (_ChartData data, _) => data.month,
-  //       yValueMapper: (_ChartData data, _) => data.engineTask,
-  //       name: 'Engine Task',
-  //       markerSettings: const MarkerSettings(isVisible: true),
-  //     ),
-  //     StackedLineSeries<_ChartData, String>(
-  //       dataSource: chartData,
-  //       xValueMapper: (_ChartData data, _) => data.month,
-  //       yValueMapper: (_ChartData data, _) => data.formBuilderActivity,
-  //       name: 'Form Activity',
-  //       markerSettings: const MarkerSettings(isVisible: true),
-  //     ),
-  //     StackedLineSeries<_ChartData, String>(
-  //       dataSource: chartData,
-  //       xValueMapper: (_ChartData data, _) => data.month,
-  //       yValueMapper: (_ChartData data, _) => data.templateActivity,
-  //       name: 'Template Activity',
-  //       markerSettings: const MarkerSettings(isVisible: true),
-  //     ),
-  //   ];
-  // }
 
   Widget buildContainer({
     required String text,

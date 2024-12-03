@@ -63,7 +63,7 @@ class _TaskScreenState extends State<TaskScreen> {
           universalController.fetchUserAnalyticsData();
         },
         child: Scaffold(
-        backgroundColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -84,84 +84,6 @@ class _TaskScreenState extends State<TaskScreen> {
             ),
           ),
         ),
-        //  DefaultTabController(
-        //   length: 2,
-        //   child: Container(
-        //     decoration: const BoxDecoration(
-        //       color: Colors.transparent,
-        //       borderRadius: BorderRadius.only(
-        //         topLeft: Radius.circular(32.0),
-        //         topRight: Radius.circular(32.0),
-        //       ),
-        //     ),
-        //     child: Scaffold(
-        //       backgroundColor: Colors.transparent,
-        //       body: NestedScrollView(
-        //         headerSliverBuilder: (context, innerBoxIsScrolled) {
-        //           return [
-        //             SliverAppBar(
-        //               expandedHeight: context.height * 0.13,
-        //               pinned: false,
-        //               floating: true,
-        //               primary: false,
-        //               backgroundColor: Colors.transparent,
-        //               excludeHeaderSemantics: false,
-        //               forceMaterialTransparency: false,
-        //               flexibleSpace: ListView(
-        //                 physics: const NeverScrollableScrollPhysics(),
-        //                 children: [
-        //                   Obx(
-        //                     () => TopSection(
-        //                       controller: controller,
-        //                       reportNameController: reportNameController,
-        //                       universalController: widget.universalController,
-        //                       currentPage: currentPage.value,
-        //                     ),
-        //                   )
-        //                 ],
-        //               ),
-        //             )
-        //           ];
-        //         },
-        //         body: Column(
-        //           children: [
-        //             Padding(
-        //               padding: const EdgeInsets.all(8.0),
-        //               child: CustomTabBar(
-        //                 onTap: (page) {
-        //                   currentPage.value = page;
-        //                   controller.currentPage.value = 1;
-        //                   // currentPage.value == 0
-        //                   //     ? controller.getAllCustomTasks()
-        //                   //     : controller.getAllCustomTasks(isTemplate: true);
-        //                 },
-        //                 title1: 'Submitted Reports',
-        //                 title2: 'Templates',
-        //               ),
-        //             ),
-        //             Expanded(
-        //               child: TabBarView(
-        //                 physics: const NeverScrollableScrollPhysics(),
-        //                 children: [
-        //                   TaskListView(
-        //                     isTemplate: false,
-        //                     controller: controller,
-        //                     universalController: widget.universalController,
-        //                   ),
-        //                   TaskListView(
-        //                     isTemplate: true,
-        //                     controller: controller,
-        //                     universalController: widget.universalController,
-        //                   ),
-        //                 ],
-        //               ),
-        //             )
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }
@@ -184,46 +106,46 @@ class TopSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-            padding:  EdgeInsets.only(left:context.width/22,right:context.width/22),
-            child: SizedBox(
-             
-              width: context.width,
-              child: ReUsableContainer(
-                color: AppColors.primaryColor,
-                width: context.width * 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const IconButton(
-                      onPressed: null,
-                      icon: Icon(FontAwesomeIcons.circlePlus,
-                          color: Colors.transparent),
-                    ),
-                    CustomTextWidget(
-                      text: 'Create Template',
-                      fontSize: 16.0,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        reportNameController.clear();
-                        CustomPopup.show(
-                          context: context,
-                          reportNameController: reportNameController,
-                          controller: controller,
-                          universalController: universalController,
-                          currentPage: currentPage,
-                        );
-                      },
-                      icon: const Icon(FontAwesomeIcons.circlePlus),
-                    ),
-                  ],
-                ),
+      padding:
+          EdgeInsets.only(left: context.width / 22, right: context.width / 22),
+      child: SizedBox(
+        width: context.width,
+        child: ReUsableContainer(
+          color: AppColors.primaryColor,
+          width: context.width * 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const IconButton(
+                onPressed: null,
+                icon: Icon(FontAwesomeIcons.circlePlus,
+                    color: Colors.transparent),
               ),
-            ),
-          );
+              CustomTextWidget(
+                text: 'Create Template',
+                fontSize: 16.0,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.w600,
+              ),
+              IconButton(
+                onPressed: () {
+                  reportNameController.clear();
+                  CustomPopup.show(
+                    context: context,
+                    reportNameController: reportNameController,
+                    controller: controller,
+                    universalController: universalController,
+                    currentPage: currentPage,
+                  );
+                },
+                icon: const Icon(FontAwesomeIcons.circlePlus),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -238,12 +160,6 @@ class TaskListView extends StatelessWidget {
     required this.controller,
     required this.universalController,
   });
-
-  // Future<void> _refreshTasks() {
-  //   return isTemplate
-  //       ? controller.getAllCustomTasks(page: 1, isTemplate: true)
-  //       : controller.getAllCustomTasks(page: 1);
-  // }
 
   Future<void> _refreshTasks() async {
     if (isTemplate) {
@@ -281,10 +197,7 @@ class TaskListView extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: context.height * 0.2),
-                  CustomTextWidget(
-                    text:  'No Templates Available'
-                 
-                  ),
+                  CustomTextWidget(text: 'No Templates Available'),
                   SizedBox(height: context.height * 0.5),
                 ],
               ),
@@ -293,7 +206,6 @@ class TaskListView extends StatelessWidget {
 
           return ListView.builder(
             controller: controller.templatesScrollController,
-              
             shrinkWrap: true,
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: tasks.length + (isLoading && hasMore ? 1 : 0),
@@ -315,12 +227,6 @@ class TaskListView extends StatelessWidget {
                                   isDefault: task.isDefault,
                                 ),
                               )
-                            // CustomTemplatePopup.show(
-                            //     context: context,
-                            //     task: task,
-                            //     controller: controller,
-                            //     universalController: universalController,
-                            //   )
                             : Get.to(() => CustomTaskScreen(
                                   reportName: task.name,
                                   task: task,
@@ -656,43 +562,15 @@ void _showDeletePopup(
                             fontWeight: FontWeight.w400),
                         const SizedBox(height: 12.0),
                         Obx(() => CustomButton(
-                                  isLoading: controller.isLoading.value,
-                                  buttonText: 'Delete',
-                                  fontSize: 12.0,
-                                  textColor: AppColors.whiteTextColor,
-                                  onTap: () {
-                                    controller.deleteCustomTask(taskId: id);
-                                  },
-                                  backgroundColor: AppColors.redColor,
-                                )
-                            // InkWell(
-                            //     onTap: () {
-                            //       print('asddas');
-                            //       // controller.deleteCustomTask(taskId: id);
-
-                            //     },
-                            //     child: ReUsableContainer(
-                            //       verticalPadding: context.height * 0.01,
-                            //       height: 50,
-                            //       color: Colors.red,
-                            //       child: Center(
-                            //           child: controller.isLoading.value
-                            //               ? const Padding(
-                            //                   padding: EdgeInsets.all(8.0),
-                            //                   child: SpinKitRing(
-                            //                     lineWidth: 2.0,
-                            //                     color: Colors.white,
-                            //                   ),
-                            //                 )
-                            //               : CustomTextWidget(
-                            //                   text: 'Delete',
-                            //                   fontSize: 12,
-                            //                   textColor: Colors.white,
-                            //                   fontWeight: FontWeight.w600,
-                            //                   textAlign: TextAlign.center,
-                            //                 )),
-                            //     )),
-                            ),
+                              isLoading: controller.isLoading.value,
+                              buttonText: 'Delete',
+                              fontSize: 12.0,
+                              textColor: AppColors.whiteTextColor,
+                              onTap: () {
+                                controller.deleteCustomTask(taskId: id);
+                              },
+                              backgroundColor: AppColors.redColor,
+                            )),
                         CustomButton(
                           isLoading: false,
                           buttonText: 'Cancel',

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-
-import 'appcolors.dart';
+import 'package:mechanix_admin/helpers/appcolors.dart';
 
 class ReUsableContainer extends StatelessWidget {
   final Widget child;
@@ -12,10 +11,12 @@ class ReUsableContainer extends StatelessWidget {
   final bool showBackgroundShadow;
   final bool showDeleteIcon;
   final VoidCallback? onDelete;
+  final bool showEditIcon;
+  final VoidCallback? onEdit;
   final Color? color;
   final double? height;
   final double? width;
-  final Function()? onTap;
+  final dynamic onTap;
 
   const ReUsableContainer({
     super.key,
@@ -28,6 +29,8 @@ class ReUsableContainer extends StatelessWidget {
     this.showBackgroundShadow = true,
     this.showDeleteIcon = false,
     this.onDelete,
+    this.showEditIcon = false,
+    this.onEdit,
     this.color,
     this.onTap,
   });
@@ -40,7 +43,7 @@ class ReUsableContainer extends StatelessWidget {
       child: Stack(
         children: [
           InkWell(
-            onTap: onTap ?? (){},
+            onTap: onTap,
             child: _buildContainer()),
           Visibility(
             visible: showDeleteIcon,
@@ -53,7 +56,19 @@ class ReUsableContainer extends StatelessWidget {
                     color: Colors.red,
                   ),
                 )),
-          )
+          ),
+            Visibility(
+            visible: showEditIcon,
+            child: Positioned(
+                right: 35,
+                child: IconButton(
+                  onPressed: onEdit,
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.grey,
+                  ),
+                )),
+          ) 
         ],
       ),
     );
