@@ -105,12 +105,20 @@ class SideMenuCard extends StatelessWidget {
               icon: const Icon(Symbols.lab_profile),
             ), 
              SideMenuItem(
+              title: 'Equipments',
+              onTap: (index, _) {
+                sideMenu.changePage(index);
+                scaffoldKey.currentState?.closeDrawer();
+              },
+              icon: const Icon(Icons.list),
+            ),
+             SideMenuItem(
               title: 'Categories',
               onTap: (index, _) {
                 sideMenu.changePage(index);
                 scaffoldKey.currentState?.closeDrawer();
               },
-              icon: const Icon(Symbols.lab_profile),
+              icon: const Icon(Symbols.category_rounded),
             ),
             // SideMenuItem(
             //   title: 'Subscriptions',

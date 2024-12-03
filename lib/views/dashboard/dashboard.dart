@@ -27,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.initState();
     _controller.tabController = TabController(
       initialIndex: 0,
-      length: 6,
+      length: 9,
       vsync: this,
     );
   }
@@ -37,7 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen>
      final UniversalController universalController = Get.put(UniversalController()); 
     return SafeArea(
       child: DefaultTabController(
-        length: 7,
+        length: 9,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -162,8 +162,12 @@ class HomeAppbar extends StatelessWidget {
                             : controller.currentPage.value == 3
                                 ? 'Users'
                                 : controller.currentPage.value == 4
-                                    ? 'Subscriptions'
+                                    ? 'Templates'
                                     : controller.currentPage.value == 5
+                                        ? 'Equipments'
+                                        : controller.currentPage.value == 6 
+                                        ? 'Categories'
+                                        : controller.currentPage.value == 8
                                         ? 'Profile'
                                         : '',
                     textColor: Colors.white,
@@ -173,6 +177,12 @@ class HomeAppbar extends StatelessWidget {
                   ),
                 ),
               ],
+
+//  : controller.currentPage.value == 7
+//                                         ? 'Profile'
+//                                         : '',
+//                     textColor: Colors.white,
+
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -194,7 +204,7 @@ class HomeAppbar extends StatelessWidget {
                       ),
                     )
                   : InkWell(
-                      onTap: () => sideMenu.changePage(5),
+                      onTap: () => sideMenu.changePage(8),
                       child: const ProfileAvatar()),
             ),
           ],

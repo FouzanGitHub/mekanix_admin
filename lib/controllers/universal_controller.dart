@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mechanix_admin/controllers/category_controller.dart';
 import 'package:mechanix_admin/data/services/analytics_service.dart';
+import 'package:mechanix_admin/data/services/category_service.dart';
 import 'package:mechanix_admin/data/services/users_service.dart';
 import 'package:mechanix_admin/helpers/snackbar.dart';
 import 'package:mechanix_admin/helpers/storage_helper.dart';
@@ -39,6 +41,8 @@ class UniversalController extends GetxController {
   var compressorCount = 0.obs;
   var formsCount = 0.obs;
   var templatesCount = 0.obs;
+  var categoryCount = 0.obs;
+  var equipmentCount = 0.obs;
 
   var isLoadingTotalUsers = true.obs;
   var isLoadingVerifiedUsers = true.obs;
@@ -52,7 +56,7 @@ class UniversalController extends GetxController {
 
   final UsersService usersService = UsersService();
   final AnalyticsService analyticsService = AnalyticsService();
-
+  final CategoriesController categoriesController = Get.put(CategoriesController(repository:CategoriesRepository()));
   XFile? userImage;
   RxString userImageURL = ''.obs;
   Uint8List? userImageInBytes;
@@ -66,6 +70,7 @@ class UniversalController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    
     fetchAllUsers();
     initializeLoadingStates(pendingUsers.length);
     getActivitiesAnalyticsData();
@@ -121,6 +126,8 @@ class UniversalController extends GetxController {
       compressorCount.value = activitiesCount.compressorCount ?? 0;
       formsCount.value = activitiesCount.formsCount ?? 0;
       templatesCount.value = activitiesCount.templatesCount ?? 0;
+      categoryCount.value  = categoriesController.categoriesResponse.value!.data!.length ?? 0;
+      equipmentCount.value  = categoriesController.enginesResponse.value!.engines.length ?? 0;
 
       isLoadingTotalUsers.value = false;
       isLoadingVerifiedUsers.value = false;

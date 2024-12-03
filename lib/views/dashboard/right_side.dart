@@ -6,6 +6,7 @@ import 'package:mechanix_admin/views/dashboard/profile_section.dart';
 import 'package:mechanix_admin/views/dashboard/registrations.dart';
 import 'package:mechanix_admin/views/dashboard/users.dart';
 
+import '../categories/category_List.dart';
 import 'tasks/task.dart';
 
 class RightSideWidget extends StatelessWidget {
@@ -36,6 +37,7 @@ class RightSideWidget extends StatelessWidget {
           UserScreen(sideMenu: sideMenu),
           TaskScreen(sideMenu: sideMenu),
           EnginesScreen(sideMenu: sideMenu),
+          CategoryListView(sideMenu: sideMenu),
           // SubscriptionsScreen(sideMenu: sideMenu),
           const SizedBox.shrink(), //Drawer
           ProfileSection(sideMenu: sideMenu),

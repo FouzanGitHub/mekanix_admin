@@ -62,4 +62,68 @@ class CategoriesRepository {
     }
   }
 
+
+  Future<Map<String, dynamic>> addCategory(String category) async {
+    final response = await http.post(
+      Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.addCategory),
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${storage.read('token')}',
+      },
+      body: json.encode({
+        'name': category,
+       
+      }),
+    );
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+    if (response.statusCode == 201) {
+         final data = jsonDecode(response.body);
+      return data;
+    } else {
+     
+      throw Exception('Failed to create');
+    }
+  }
+  Future<Map<String, dynamic>> deleteCategory(String id,) async {
+    final response = await http.delete(
+      Uri.parse('${ApiEndPoints.baseUrl}${ApiEndPoints.deleteCategory}$id'),
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${storage.read('token')}',
+      },
+    
+    );
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+    if (response.statusCode == 200) {
+         final data = jsonDecode(response.body);
+      return data;
+    } else {
+     
+      throw Exception('Failed to create');
+    }
+  }
+  Future<Map<String, dynamic>> updateCategory(String id, String name) async {
+    final response = await http.put(
+      Uri.parse('${ApiEndPoints.baseUrl}${ApiEndPoints.updateCategory}$id'),
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${storage.read('token')}',
+      },
+      body: json.encode({
+        'name': name,
+       
+      }),
+    );
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+    if (response.statusCode == 200) {
+         final data = jsonDecode(response.body);
+      return data;
+    } else {
+     
+      throw Exception('Failed to create');
+    }
+  }  
 }

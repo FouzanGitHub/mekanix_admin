@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 
@@ -21,9 +24,11 @@ import '../../helpers/responsive_widget.dart';
 import '../../helpers/reusable_container.dart';
 import '../../helpers/reusable_textfield.dart';
 import '../../helpers/tabbar.dart';
+import '../../helpers/toast.dart';
 import '../../helpers/validator.dart';
 import '../dashboard/tasks/widgets/heading_and_textfield.dart';
 import 'category_dialog.dart';
+import 'dart:html' as html;
 
 class EnginesScreen extends StatelessWidget {
   final SideMenuController sideMenu;
@@ -105,7 +110,7 @@ class EnginesScreen extends StatelessWidget {
              
                        backgroundColor: AppColors.primaryColor,
                         isLoading: false,
-                        buttonText: '+ Add',
+                        buttonText: '+ Add Equipment',
                         fontSize: 14,
                         onTap: () {
                           controller.isQrCodeGenerated.value = false;
@@ -120,6 +125,7 @@ class EnginesScreen extends StatelessWidget {
                               controller2: categoryController);
                         },
                       ),
+                      
                       CustomDynamicTabBar(
                         onTap: (index) {
                           // Set the selected category when a tab is selected
@@ -212,9 +218,7 @@ class EnginesScreen extends StatelessWidget {
                                                   textColor: AppColors.lightGreyColor),
                                             
                                             ]),
-                                        trailing: engine.isDefault ?? true
-                                            ? null
-                                            : Wrap(
+                                        trailing:  Wrap(
                                                 spacing: 12.0,
                                                 children: [
                                                   InkWell(
@@ -236,6 +240,7 @@ class EnginesScreen extends StatelessWidget {
                                                             context: context,
                                                             controller:
                                                                 controller,
+                                                            controller2: categoryController,
                                                             model: engine);
                                                       },
                                                       child: const Icon(
@@ -381,11 +386,11 @@ class DialogFirstView extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             HeadingAndTextfield(
-                title: 'Enter Engine Name & Model',
+                title: 'Enter Equipment Name & Model',
                 fontSize: 12.0,
                 controller: controller.engineName,
                 validator: (val) => AppValidator.validateEmptyText(
-                    fieldName: 'Engine Name & Model', value: val)),
+                    fieldName: 'Equipment Name & Model', value: val)),
             HeadingAndTextfield(
                 title: 'Enter Subtitle',
                 fontSize: 12.0,
@@ -441,6 +446,70 @@ class DialogSecondView extends StatelessWidget {
     super.key,
     required this.controller,
   });
+Future<void> _downloadQrCode() async {
+  try {
+    // Create a QrPainter instance
+    final qrPainter = QrPainter(
+      data: controller.engineName.text.trim(),
+      version: QrVersions.auto,
+      errorCorrectionLevel: QrErrorCorrectLevel.L,
+      gapless: false,
+    );
+
+    // Capture the QR code as an image
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder, Rect.fromPoints(Offset(0, 0), Offset(200, 200)));
+    qrPainter.paint(canvas, Size(200, 200));
+
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(200, 200);
+
+    // Convert the image to bytes
+    final byteData = await img.toByteData(format: ImageByteFormat.png);
+    final buffer = byteData!.buffer.asUint8List();
+
+    // Web-specific download using html package
+    if (kIsWeb) {
+      final blob = html.Blob([buffer]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..target = 'blank'
+        ..download = 'qr_code.png';
+
+      // Trigger the download
+      anchor.click();
+      html.Url.revokeObjectUrl(url);
+    } else {
+      // For mobile platforms (Android, iOS)
+      final directory = await getExternalStorageDirectory();
+      final filePath = '${directory!.path}/qr_code.png';
+      final file = File(filePath);
+
+      // Save the bytes to a file
+      await file.writeAsBytes(buffer);
+
+      // Save to gallery (mobile-specific)
+      final result = await ImageGallerySaver.saveFile(filePath);
+      if (result['isSuccess'] == true) {
+        ToastMessage.showToastMessage(
+          message: 'QR Code successfully saved in gallery',
+          backgroundColor: Colors.green,
+        );
+      } else {
+        ToastMessage.showToastMessage(
+          message: 'Failed to Download QR code',
+          backgroundColor: Colors.red,
+        );
+      }
+    }
+  } catch (e) {
+    ToastMessage.showToastMessage(
+      message: 'Failed to download QR code Image: $e',
+      backgroundColor: Colors.red,
+    );
+    print('$e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -469,23 +538,37 @@ class DialogSecondView extends StatelessWidget {
         ),
        
         const Divider(color: Colors.black54),
+         CustomButton(
+          isLoading: false,
+          backgroundColor:  AppColors.primaryColor ,
+          textColor: Colors.black,
+          buttonText: 'Download QR Code',
+          fontSize: 12.0,
+          onTap: _downloadQrCode,
+        ),
+      
+        
         CustomButton(
           isLoading: false,
- 
+          backgroundColor: AppColors.secondaryColor,
+        
+          textColor: Colors.white,
           buttonText: 'Close',
           fontSize: 12.0,
+
           onTap: () {
             controller.isQrCodeGenerated.value = false;
             controller.engineImageUrl.value = '';
             controller.engineName.clear();
             controller.engineSubtitle.clear();
             Get.back();
-          }, backgroundColor: controller.isQrCodeGenerated.value == true ? AppColors.primaryColor : AppColors.secondaryColor,
+          },
         ),
       ],
     );
   }
 }
+
 
 
 
@@ -568,6 +651,7 @@ void _showEditPopup(
                                 // onTap: () => controller.updateImage(model),
                                 onTap: () {
                                   controller.updateImage(model);
+                                  
                                                          
                                 },
                                 child:  Obx(()=>
@@ -593,13 +677,13 @@ void _showEditPopup(
                                     //     text: 'ID: ${model.id}',
                                     //     fontSize: 11.0),
                                     HeadingAndTextfield(
-                                        title: 'Enter Engine Name & Model',
+                                        title: 'Enter Equipment Name & Model',
                                         fontSize: 12.0,
                                         controller: controller.engineName,
                                         validator: (val) =>
                                             AppValidator.validateEmptyText(
                                                 fieldName:
-                                                    'Engine Name & Model',
+                                                    'Equipment Name & Model',
                                                 value: val)),
                                     HeadingAndTextfield(
                                         title: 'Enter Subtitle',
@@ -607,10 +691,10 @@ void _showEditPopup(
                                         controller: controller.engineSubtitle,
                                         validator: (val) =>
                                             AppValidator.validateEmptyText(
-                                                fieldName: 'Engine Subtitle',
+                                                fieldName: 'Equipment Subtitle',
                                                 value: val)),
                                      CustomTextWidget(
-                                        text: 'Select Engine Type',
+                                        text: 'Select Equipment Type',
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.w600,
                                         maxLines: 2),
@@ -635,6 +719,7 @@ void _showEditPopup(
                                     }
                                     controller2.fetchEngines(
                                         model.categoryName, '');
+                                    
                                   }, backgroundColor:  controller.isQrCodeGenerated.value ==true
                                   ? AppColors.primaryColor
                                   : AppColors.secondaryColor
@@ -650,9 +735,9 @@ void _showEditPopup(
 void _showDeletePopup(
     {required BuildContext context,
     required EnginesController controller,
+    required CategoriesController controller2,
     required model}) {
-  final CategoriesController categoryController =
-      Get.put(CategoriesController(repository: CategoriesRepository()));
+
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -706,33 +791,46 @@ void _showDeletePopup(
                             fontWeight: FontWeight.w400),
                         const SizedBox(height: 12.0),
                         Obx(
-                          () => InkWell(
-                              onTap: () {
-                                controller.deleteEngine(engineModel: model);
-                                categoryController.fetchEngines(
-                                    model.categoryName, '');
-                              },
-                              child: ReUsableContainer(
-                                verticalPadding: context.height * 0.01,
-                                height: 50,
-                                color: Colors.red,
-                                child: Center(
-                                    child: controller.isLoading.value
-                                        ? const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: SpinKitRing(
-                                              lineWidth: 2.0,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        :  CustomTextWidget(
-                                            text: 'Delete',
-                                            fontSize: 12,
-                                            textColor: Colors.white,
-                                            fontWeight: FontWeight.w600,
-                                            textAlign: TextAlign.center,
-                                          )),
-                              )),
+                          () => CustomButton(
+                          isLoading: controller.isLoading.value,
+                          backgroundColor: AppColors.redColor,
+                          textColor: AppColors.whiteTextColor,
+                          buttonText: 'Delete',
+                          fontSize: 12.0,
+                          onTap: () {
+                         controller.deleteEngine(engineModel: model);
+                         controller2.fetchEngines(model.categoryName, '');
+                         
+                        //  Get.back();
+                          },
+                        )
+                          // InkWell(
+                          //     onTap: () {
+                          //       controller.deleteEngine(engineModel: model);
+                          //       categoryController.fetchEngines(
+                          //           model.categoryName, '');
+                          //     },
+                          //     child: ReUsableContainer(
+                          //       verticalPadding: context.height * 0.01,
+                          //       height: 50,
+                          //       color: Colors.red,
+                          //       child: Center(
+                          //           child: controller.isLoading.value
+                          //               ? const Padding(
+                          //                   padding: EdgeInsets.all(8.0),
+                          //                   child: SpinKitRing(
+                          //                     lineWidth: 2.0,
+                          //                     color: Colors.white,
+                          //                   ),
+                          //                 )
+                          //               :  CustomTextWidget(
+                          //                   text: 'Delete',
+                          //                   fontSize: 12,
+                          //                   textColor: Colors.white,
+                          //                   fontWeight: FontWeight.w600,
+                          //                   textAlign: TextAlign.center,
+                          //                 )),
+                          //     )),
                         ),
                         CustomButton(
                           isLoading: false,
@@ -748,5 +846,55 @@ void _showDeletePopup(
                     ),
                   ))));
     },
+  );}
+void showCustomPopup(
+    {required BuildContext context,
+    required double? width,
+    required Widget widget}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'Dismiss',
+    transitionDuration: const Duration(milliseconds: 100),
+    pageBuilder: (context, animation, secondaryAnimation) => Container(),
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return ScaleTransition(
+          scale: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+          child: FadeTransition(
+              opacity: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+              child: AlertDialog(
+                  insetPadding: const EdgeInsets.all(20),
+                  scrollable: true,
+                  backgroundColor: Colors.transparent,
+                  content: Container(
+                    width:Responsive.isMobile(context) ? context.width * 0.9 : context.width * 0.3,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: context.height * 0.05),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Color.fromRGBO(255, 220, 105, 0.4),
+                          Color.fromRGBO(86, 127, 255, 0.4),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 5.0,
+                            spreadRadius: 5.0),
+                        BoxShadow(
+                            color: Colors.white,
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 0.0,
+                            spreadRadius: 0.0)
+                      ],
+                    ),
+                    child: widget,
+                  ))));
+    },
   );
-}
+}  
+

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mechanix_admin/controllers/universal_controller.dart';
+import 'package:mechanix_admin/data/services/category_service.dart';
 
 import '../data/services/engine_service.dart';
 import '../helpers/storage_helper.dart';
@@ -20,6 +21,7 @@ class EnginesController extends GetxController {
   RxString engineImageUrl = ''.obs;
   TextEditingController engineName = TextEditingController();
   TextEditingController engineSubtitle = TextEditingController();
+  final CategoriesController categoriesController = Get.put(CategoriesController(repository: CategoriesRepository()));
   var categoryId = ''.obs;
   var categoryName = ''.obs;
   RxString engineType = 'Generator'.obs;
@@ -190,7 +192,8 @@ class EnginesController extends GetxController {
 
           isQrCodeGenerated.value = true;
           engineType.value = 'Generator';
-          Get.find<CategoriesController>().fetchEngines(Get.find<CategoriesController>().selectedCategory.value, '');   
+         
+          categoriesController.fetchEngines( categoriesController.selectedCategory.value, '');
           // getAllEngines();
         } else {
           ToastMessage.showToastMessage(
@@ -229,8 +232,7 @@ class EnginesController extends GetxController {
         ToastMessage.showToastMessage(
             message: 'Updated Successfully',
             backgroundColor: Colors.green);
-        // getAllEngines();
-       Get.find<CategoriesController>().fetchEngines( Get.find<CategoriesController>().selectedCategory.value, '');
+          categoriesController.fetchEngines( categoriesController.selectedCategory.value, '');
         Get.back();
       } else {
         ToastMessage.showToastMessage(
@@ -268,7 +270,7 @@ class EnginesController extends GetxController {
           message: 'Deleted Successfully',
           backgroundColor: Colors.green,
         );
-        // getAllEngines();
+       categoriesController.fetchEngines( categoriesController.selectedCategory.value, '');
         Get.back();
       } else {
         ToastMessage.showToastMessage(
@@ -287,9 +289,13 @@ class EnginesController extends GetxController {
     }
   }
 
+
+
+
   @override
   void onClose() {
     engineName.clear();
+
     engineSubtitle.clear();
     engineImageUrl.value = '';
     engineImageInBytes = Uint8List(0);

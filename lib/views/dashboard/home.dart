@@ -10,6 +10,9 @@ import 'package:mechanix_admin/helpers/reusable_container.dart';
 import 'package:mechanix_admin/models/analytics_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../controllers/category_controller.dart';
+import '../../data/services/category_service.dart';
+
 class HomeSection extends StatefulWidget {
   final SideMenuController sideMenu;
 
@@ -103,6 +106,7 @@ class _HomeSectionState extends State<HomeSection> {
   @override
   Widget build(BuildContext context) {
   final UniversalController universalController = Get.put(UniversalController());
+  final CategoriesController categoryController = Get.put(CategoriesController(repository: CategoriesRepository()));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 16.0),
       child: Container(
@@ -114,7 +118,9 @@ class _HomeSectionState extends State<HomeSection> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Obx(
-                () => Wrap(
+                () { 
+               
+                return Wrap(
                   alignment: WrapAlignment.start,
                   crossAxisAlignment: WrapCrossAlignment.start,
                   runAlignment: WrapAlignment.center,
@@ -173,13 +179,28 @@ class _HomeSectionState extends State<HomeSection> {
                     buildContainer(
                       text: 'Total Templates Created',
                       icon: FontAwesomeIcons.fileInvoice,
-                      value: controller.templatesCount,
+                     value: controller.templatesCount,
                       isLoading: controller.isLoadingTemplatesCount.value,
                   
                     ),
-                    // Add other containers similarly for remaining data
+                     buildContainer(
+                      text: 'Total Categories Created',
+                      icon:Icons.category_outlined,
+                     value: controller.categoryCount,
+                      isLoading: controller.isLoadingTemplatesCount.value,
+                                       
+                                         ),
+                    // buildContainer(
+                    //   text: 'Total Equipments',
+                    //   icon: FontAwesomeIcons.list,
+                    //  value: controller.equipmentCount,
+                    //   isLoading: controller.isLoadingTemplatesCount.value,
+                                       
+                    //                      ),                     
+                    
+                
                   ],
-                ),
+                );},
               ),
               _buildGraph(context),
             ],

@@ -38,13 +38,16 @@ class ApiEndPoints {
 
   //Engine
   static String addEngineUrl = '/api/engine/createenginebrand';
-  static String getEngineUrl = '/api/engine/getenginebrandpagination';
+  static String getEngineUrl = '/api/engine/getenginebrandpagination?limit=200000000000000000000000000000000';
   static String getEngineBrandById = '/api/engine/getenginebrandbyid';
   static String updateEngineUrl = '/api/engine/updateenginebrand';
   static String deleteEngineUrl = '/api/engine/deleteenginebrand';
   static String updateEngineImageUrl = '/api/engine/updateengineprofile';
 
 //Category
-  static const String getAllCategories = '/api/category/getAll';  
-  static const String getCategoriesData = '/api/engine/getenginebrandpagination';  
+  static const String getAllCategories  = '/api/category/getAll';  
+  static const String getCategoriesData = '/api/engine/getenginebrandpagination?limit=20000000000000000000000000000000000';  
+  static const String addCategory       = '/api/category/create';  
+  static const String updateCategory    = '/api/category/update?id=';  
+  static const String deleteCategory    = '/api/category/delete?id=';  
 }
